@@ -1,3 +1,4 @@
+
 (1..20).each do |i|
   if i % 3 == 0
     puts "Fizz #{i}"
