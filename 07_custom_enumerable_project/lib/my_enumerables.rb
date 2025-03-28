@@ -38,8 +38,6 @@ module Enumerable
   end
 
   def my_count(arg = nil)
-    #count number of items
-    #count number of specified params
     count = 0
 
     if block_given?
@@ -58,6 +56,26 @@ module Enumerable
     count 
   end
 
+  def my_map
+    result = []
+    for i in self
+      result << yield(i)
+    end
+    result
+  end
+
+  def my_inject(initial = nil)
+    accum = initial.nil? ? self.first : initial #use first element if no initial provided
+    start_index = initial.nil? ? 1 : 0 #skip first element if no initial value
+
+    self[start_index..].each do |item|
+      accum = yield(accum, item)
+    end
+
+    accum
+
+  end
+
 end
 
 # You will first have to define my_each
@@ -74,30 +92,17 @@ class Array
 end
 
 
-puts "test"
-puts [1,2,3].my_none? {|num| num > 4}
-puts [1,2,5].my_none? {|num| num > 4}
+# puts "test"
 
-# declaring array 
-a = [18, 22, 33, nil, 5, 6] 
+# # declaring array 
+# a = [18, 22, 33, 1, 5, 6] 
   
-# declaring array 
-b = [1, 4, 1, 1, 88, 9] 
+# # declaring array 
+# b = [1, 4, 1, 1, 88, 9] 
   
-# declaring array 
-c = [18, 22, nil, nil, 50, 6] 
-  
-# counting total elements 
-puts "counting : #{a.my_count}\n\n"
-  
-# counting 1 
-puts "counting : #{b.my_count(1)}\n\n"
-  
-# counting 'nil' 
-puts "counting : #{c.my_count(nil)}\n\n"
+# # declaring array 
+# c = [18, 22, 1, 1, 50, 6] 
 
-
-
-puts [1, 2, 3, 2, 2, 4, 5].my_count       # Output: 7
-puts [1, 2, 3, 2, 2, 4, 5].my_count(2)    # Output: 3
-puts [1, 2, 3, 2, 2, 4, 5].my_count { |n| n.even? }  # Output: 4
+# puts [1, 2, 3, 4].my_inject(0) { |sum, num| sum + num }  # Output: 10
+# puts [1, 2, 3, 4].my_inject { |sum, num| sum + num }      # Output: 10
+# puts [1, 2, 3, 4].my_inject(1) { |prod, num| prod * num } # Output: 24
