@@ -11,7 +11,7 @@ attack = 6
 name = ""
         
         #col1       col2      col3         col4 
-map = [["plains",   "town",   "bridge",    "plans"],   #row1
+map = [["plains",   "town",   "bridge",    "plains"],   #row1
        ["plains",   "plains", "plains",    "oasis"],   #row2
        ["jungle",   "lake",   "mountain",  "plains"],  #row3
        ["mountain", "swamp",  "plains",    "lair"]]    #row4
@@ -19,8 +19,10 @@ map = [["plains",   "town",   "bridge",    "plans"],   #row1
 y_len = map.length - 1
 x_len = map[0].length - 1
 
-start_loc = map[0][2]
+start_loc = map[0][1]
 current_loc = start_loc
+y = 0
+x = 1
 
 biome = {
   plains: {
@@ -65,11 +67,13 @@ def clear()
   system("cls") || system("clear")
 end
 
-def save(name, hp, attack)
+def save(name, hp, attack, x, y)
   data = {
     name: name,
     hp: hp,
-    attack: attack 
+    attack: attack, 
+    x: x,
+    y: y
   }
   File.open("load.json","w") { |file| file.write(data.to_json) }
 end
@@ -115,6 +119,8 @@ while run
       name = data['name'] 
       hp = data['hp'].to_i
       attack = data['attack'].to_i
+      x = data['x'].to_i
+      y = data['y'].to_i
 
       puts "Game Loaded"
       puts "Your name is #{name}"
@@ -140,19 +146,21 @@ while run
 
   while play
 
-    save(name, hp, attack) #autosave
+    save(name, hp, attack, x, y) #autosave
 
     clear()
     draw_line()
     puts "#{name}"
     puts "HP: #{hp}"
     puts "ATTACK: #{attack}"
+    puts "YOU ARE IN THE #{biome[map[y][x].to_sym][:d]}"
     draw_line()
 
-    puts "1 GO NORTH"
+    puts "1 GO NORTH" if y > 0
     puts "2 GO SOUTH"
     puts "3 GO EAST"
     puts "4 GO WEST"
+    # puts "Coords #{x} #{y}"
 
     draw_line()
     puts "0 SAVE AND BACK TO MAIN MENU" 
@@ -160,8 +168,15 @@ while run
     dest = gets.chomp
 
     if dest == "1"
-       
+      y -= 1 if y > 0 
+    elsif dest == "2"
+      y += 1 if y < y_len
+    elsif dest == "3"
+      x += 1 if x < x_len
+    elsif dest == "4"
+      x -= 1 if x > 0
     elsif dest == "0"
+      save(name, hp, attack, x, y) #autosave
       play = false
       menu = true
     end
