@@ -5,11 +5,15 @@ run = true
 menu = true
 play = false
 rules = false
+@traveling = true
 
 hp = 50
 attack = 6
 name = ""
-        
+
+BADDIES = ["Goblin", "Poring"]        
+
+
         #col1       col2      col3         col4 
 map = [["plains",   "town",   "bridge",    "plains"],   #row1
        ["plains",   "plains", "plains",    "oasis"],   #row2
@@ -92,6 +96,10 @@ def draw_line()
     puts "-------------"
 end
 
+def battle()
+  #battle, respawn from a list of possible baddies
+end
+
 while run
 
   while menu
@@ -150,6 +158,15 @@ while run
 
     clear()
     draw_line()
+
+    if biome[map[y][x].to_sym][:e] #
+      puts "this place can spawn baddies"
+      if rand(100) < 30
+        puts "a baddie has spawned!"
+        @traveling = false
+      end
+    end
+
     puts "#{name}"
     puts "HP: #{hp}"
     puts "ATTACK: #{attack}"
@@ -157,9 +174,9 @@ while run
     draw_line()
 
     puts "1 GO NORTH" if y > 0
-    puts "2 GO SOUTH"
-    puts "3 GO EAST"
-    puts "4 GO WEST"
+    puts "2 GO SOUTH" if y < y_len
+    puts "3 GO EAST"  if x < x_len
+    puts "4 GO WEST"  if x > 0
     # puts "Coords #{x} #{y}"
 
     draw_line()
