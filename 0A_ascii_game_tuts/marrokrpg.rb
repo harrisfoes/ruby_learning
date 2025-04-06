@@ -11,7 +11,24 @@ hp = 50
 attack = 6
 name = ""
 
-BADDIES = ["Goblin", "Poring"]        
+BADDIES = ["goblin", "poring"]        
+
+BADDY_DEETS = {
+  goblin: {
+    name: "Goblin",
+    atk: 3,
+    hp: 12,
+    reward: "Potion",
+    gold: 6 
+  },
+  poring: {
+    name: "Poring",
+    atk: 2,
+    hp: 8,
+    reward: "Jelly",
+    gold: 4 
+  }
+}
 
 
         #col1       col2      col3         col4 
