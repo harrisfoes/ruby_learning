@@ -115,6 +115,11 @@ end
 
 def battle()
   #battle, respawn from a list of possible baddies
+  foe = BADDIES[rand(BADDIES.length)]
+  draw_line()
+  puts "You've encountered a #{foe}"
+  puts "A battle commences!"
+  draw_line()
 end
 
 while run
@@ -181,6 +186,10 @@ while run
       if rand(100) < 30
         puts "a baddie has spawned!"
         @traveling = false
+
+        battle()
+
+        @traveling = true
       end
     end
 
