@@ -120,6 +120,12 @@ def battle()
   puts "You've encountered a #{foe}"
   puts "A battle commences!"
   draw_line()
+
+  foe_hp = BADDY_DEETS[foe.to_sym][:hp]
+  foe_atk = BADDY_DEETS[foe.to_sym][:atk]
+  puts "Enemy HP: #{foe_hp}"
+  puts "Enemy ATK: #{foe_atk}"
+
 end
 
 while run
@@ -181,17 +187,6 @@ while run
     clear()
     draw_line()
 
-    if biome[map[y][x].to_sym][:e] #
-      puts "this place can spawn baddies"
-      if rand(100) < 30
-        puts "a baddie has spawned!"
-        @traveling = false
-
-        battle()
-
-        @traveling = true
-      end
-    end
 
     puts "#{name}"
     puts "HP: #{hp}"
@@ -204,6 +199,19 @@ while run
     puts "3 GO EAST"  if x < x_len
     puts "4 GO WEST"  if x > 0
     # puts "Coords #{x} #{y}"
+
+    if biome[map[y][x].to_sym][:e] #
+      puts "this place can spawn baddies"
+      if rand(100) < 30
+        puts "a baddie has spawned!"
+        @traveling = false
+        menu = false
+
+        battle()
+
+        @traveling = true
+      end
+    end
 
     draw_line()
     puts "0 SAVE AND BACK TO MAIN MENU" 
