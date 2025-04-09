@@ -7,8 +7,8 @@ play = false
 rules = false
 @traveling = true
 
-hp = 50
-attack = 6
+@hp = 50
+@attack = 6
 name = ""
 
 BADDIES = ["goblin", "poring"]        
@@ -18,6 +18,7 @@ BADDY_DEETS = {
     name: "Goblin",
     atk: 3,
     hp: 12,
+    face: "<( o _;_;_, o)>",
     reward: "Potion",
     gold: 6 
   },
@@ -25,6 +26,7 @@ BADDY_DEETS = {
     name: "Poring",
     atk: 2,
     hp: 8,
+    face: "( o _, o )",
     reward: "Jelly",
     gold: 4 
   }
@@ -88,11 +90,11 @@ def clear()
   system("cls") || system("clear")
 end
 
-def save(name, hp, attack, x, y)
+def save(name, x, y)
   data = {
     name: name,
-    hp: hp,
-    attack: attack, 
+    hp:@hp,
+    attack: @attack, 
     x: x,
     y: y
   }
@@ -116,6 +118,8 @@ end
 def battle()
   #battle, respawn from a list of possible baddies
   foe = BADDIES[rand(BADDIES.length)]
+
+  clear()
   draw_line()
   puts "You've encountered a #{foe}"
   puts "A battle commences!"
@@ -125,6 +129,44 @@ def battle()
   foe_atk = BADDY_DEETS[foe.to_sym][:atk]
   puts "Enemy HP: #{foe_hp}"
   puts "Enemy ATK: #{foe_atk}"
+  puts "#{BADDY_DEETS[foe.to_sym][:face]}"
+
+  while @hp > 0 and foe_hp > 0
+  #while there is still no winner
+
+    draw_line()
+    puts "1 ATTACK"
+    puts "2 USE POTION"
+    puts "3 RUN AWAY"
+    draw_line()
+
+    choice = gets.chomp
+    if choice == "1"
+      dmg = rand(@attack)
+      foe_hp -= dmg 
+      puts "You attack the #{foe} for #{dmg} damage"
+    elsif choice == "2"
+      #potion logic
+    elsif choice == "3"
+      #run away logic
+    end
+
+    if foe_hp > 0
+      foe_dmg = rand(foe_atk)
+      @hp -= foe_dmg
+      puts "The #{foe} attacks you for #{foe_dmg} damage"
+    end
+  end
+
+  if @hp <= 0
+    #lose scenario
+    puts "GAME OVER"
+  elsif foe_hp <= 0
+    #win scenario
+    puts "You win!"
+  end
+
+  @traveling = true
 
 end
 
@@ -153,8 +195,8 @@ while run
 
       data = load() 
       name = data['name'] 
-      hp = data['hp'].to_i
-      attack = data['attack'].to_i
+      @hp = data['hp'].to_i
+      @attack = data['attack'].to_i
       x = data['x'].to_i
       y = data['y'].to_i
 
@@ -182,35 +224,34 @@ while run
 
   while play
 
-    save(name, hp, attack, x, y) #autosave
+    save(name, x, y) #autosave
 
     clear()
     draw_line()
 
 
     puts "#{name}"
-    puts "HP: #{hp}"
-    puts "ATTACK: #{attack}"
+    puts "HP: #{@hp}"
+    puts "ATTACK: #{@attack}"
     puts "YOU ARE IN THE #{biome[map[y][x].to_sym][:d]}"
     draw_line()
 
-    puts "1 GO NORTH" if y > 0
-    puts "2 GO SOUTH" if y < y_len
-    puts "3 GO EAST"  if x < x_len
-    puts "4 GO WEST"  if x > 0
-    # puts "Coords #{x} #{y}"
-
-    if biome[map[y][x].to_sym][:e] #
-      puts "this place can spawn baddies"
+    if biome[map[y][x].to_sym][:e] #if map can spawn enemy
       if rand(100) < 30
-        puts "a baddie has spawned!"
         @traveling = false
         menu = false
 
         battle()
 
-        @traveling = true
       end
+    end
+
+    if @traveling 
+      puts "1 GO NORTH" if y > 0
+      puts "2 GO SOUTH" if y < y_len
+      puts "3 GO EAST"  if x < x_len
+      puts "4 GO WEST"  if x > 0
+      # puts "Coords #{x} #{y}"
     end
 
     draw_line()
@@ -227,7 +268,7 @@ while run
     elsif dest == "4"
       x -= 1 if x > 0
     elsif dest == "0"
-      save(name, hp, attack, x, y) #autosave
+      save(name, x, y) #autosave
       play = false
       menu = true
     end
