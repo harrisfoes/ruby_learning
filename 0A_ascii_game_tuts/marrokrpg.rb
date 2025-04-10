@@ -7,9 +7,10 @@ play = false
 rules = false
 @traveling = true
 
-@hp = 50
+@hp = 30 
+@hp_max = 30
 @attack = 6
-name = ""
+@name = ""
 
 BADDIES = ["goblin", "poring"]        
 
@@ -34,20 +35,20 @@ BADDY_DEETS = {
 
 
         #col1       col2      col3         col4 
-map = [["plains",   "town",   "bridge",    "plains"],   #row1
+MAP = [["plains",   "town",   "bridge",    "plains"],   #row1
        ["plains",   "plains", "plains",    "oasis"],   #row2
        ["jungle",   "lake",   "mountain",  "plains"],  #row3
        ["mountain", "swamp",  "plains",    "lair"]]    #row4
 
-y_len = map.length - 1
-x_len = map[0].length - 1
+y_len = MAP.length - 1
+x_len = MAP[0].length - 1
 
-start_loc = map[0][1]
+start_loc = MAP[0][1]
 current_loc = start_loc
-y = 0
-x = 1
+@y = 0
+@x = 1
 
-biome = {
+BIOME = {
   plains: {
     e: true,
     d: "PLAINS"
@@ -90,13 +91,13 @@ def clear()
   system("cls") || system("clear")
 end
 
-def save(name, x, y)
+def save()
   data = {
-    name: name,
+    name: @name,
     hp:@hp,
     attack: @attack, 
-    x: x,
-    y: y
+    x: @x,
+    y: @y
   }
   File.open("load.json","w") { |file| file.write(data.to_json) }
 end
@@ -115,25 +116,50 @@ def draw_line()
     puts "-------------"
 end
 
+def player_info()
+    draw_line()
+    puts "#{@name}"
+    puts "HP: #{@hp}/#{@hp_max}"
+    puts "ATTACK: #{@attack}"
+    puts "YOU ARE IN THE #{BIOME[MAP[@y][@x].to_sym][:d]}"
+    draw_line()
+end
+
 def battle()
   #battle, respawn from a list of possible baddies
   foe = BADDIES[rand(BADDIES.length)]
+  foe_data = BADDY_DEETS[foe.to_sym]
+  foe_hp = foe_data[:hp]
+  foe_atk = foe_data[:atk]
+  @attack_log = ""
+  @foe_log = ""
 
-  clear()
   draw_line()
   puts "You've encountered a #{foe}"
   puts "A battle commences!"
-  draw_line()
 
-  foe_hp = BADDY_DEETS[foe.to_sym][:hp]
-  foe_atk = BADDY_DEETS[foe.to_sym][:atk]
-  puts "Enemy HP: #{foe_hp}"
-  puts "Enemy ATK: #{foe_atk}"
-  puts "#{BADDY_DEETS[foe.to_sym][:face]}"
+  def battle_log()
+    if @attack_log.size() > 0 or @foe_log.size() > 0
+      draw_line()
+      puts @attack_log if @attack_log.size() > 0
+      puts @foe_log if @foe_log.size() > 0
+      draw_line()
+    end
+  end
 
   while @hp > 0 and foe_hp > 0
-  #while there is still no winner
+    #while there is still no winner
+    
+    draw_line()
+    puts "Defeat the #{foe}!"
+    puts "#{BADDY_DEETS[foe.to_sym][:face]}"
+    draw_line()
 
+    battle_log()
+
+    puts "#{@name}'s HP: #{@hp}"
+    puts "Enemy HP: #{foe_hp}"
+    puts "Enemy ATK: #{foe_atk}"
     draw_line()
     puts "1 ATTACK"
     puts "2 USE POTION"
@@ -141,10 +167,11 @@ def battle()
     draw_line()
 
     choice = gets.chomp
+
     if choice == "1"
       dmg = rand(@attack)
       foe_hp -= dmg 
-      puts "You attack the #{foe} for #{dmg} damage"
+      @attack_log = "You attack the #{foe} for #{dmg} damage"
     elsif choice == "2"
       #potion logic
     elsif choice == "3"
@@ -154,17 +181,30 @@ def battle()
     if foe_hp > 0
       foe_dmg = rand(foe_atk)
       @hp -= foe_dmg
-      puts "The #{foe} attacks you for #{foe_dmg} damage"
+      @foe_log = "The #{foe} attacks you for #{foe_dmg} damage"
     end
+
+    clear()
+
   end
 
+  battle_log()
+  draw_line()
   if @hp <= 0
     #lose scenario
     puts "GAME OVER"
+    press_any_key()
+    exit 
   elsif foe_hp <= 0
     #win scenario
     puts "You win!"
+    #check if wins a potion
+    puts "The #{foe} drops x gold"
+    puts "The #{foe} drops a potion"
   end
+  draw_line()
+  press_any_key()
+  clear()
 
   @traveling = true
 
@@ -187,21 +227,21 @@ while run
     if choice == "1"
 
       print "Enter your name: "
-      name = gets.chomp
+      @name = gets.chomp
       menu = false
       play = true
 
     elsif choice == "2"
 
       data = load() 
-      name = data['name'] 
+      @name = data['name'] 
       @hp = data['hp'].to_i
       @attack = data['attack'].to_i
-      x = data['x'].to_i
-      y = data['y'].to_i
+      @x = data['x'].to_i
+      @y = data['y'].to_i
 
       puts "Game Loaded"
-      puts "Your name is #{name}"
+      puts "Your name is #{@name}"
       press_any_key()
 
       menu = false
@@ -210,7 +250,7 @@ while run
     elsif choice == "3"
 
       puts "These are the rules"
-      puts "Your name is #{name}"
+      puts "Your name is #{@name}"
       press_any_key()
 
     elsif choice == "4"
@@ -224,19 +264,11 @@ while run
 
   while play
 
-    save(name, x, y) #autosave
+    save() #autosave
 
     clear()
-    draw_line()
 
-
-    puts "#{name}"
-    puts "HP: #{@hp}"
-    puts "ATTACK: #{@attack}"
-    puts "YOU ARE IN THE #{biome[map[y][x].to_sym][:d]}"
-    draw_line()
-
-    if biome[map[y][x].to_sym][:e] #if map can spawn enemy
+    if BIOME[MAP[@y][@x].to_sym][:e] #if map can spawn enemy
       if rand(100) < 30
         @traveling = false
         menu = false
@@ -247,10 +279,11 @@ while run
     end
 
     if @traveling 
-      puts "1 GO NORTH" if y > 0
-      puts "2 GO SOUTH" if y < y_len
-      puts "3 GO EAST"  if x < x_len
-      puts "4 GO WEST"  if x > 0
+      player_info()
+      puts "1 GO NORTH" if @y > 0
+      puts "2 GO SOUTH" if @y < y_len
+      puts "3 GO EAST"  if @x < x_len
+      puts "4 GO WEST"  if @x > 0
       # puts "Coords #{x} #{y}"
     end
 
@@ -260,15 +293,15 @@ while run
     dest = gets.chomp
 
     if dest == "1"
-      y -= 1 if y > 0 
+      @y -= 1 if @y > 0 
     elsif dest == "2"
-      y += 1 if y < y_len
+      @y += 1 if @y < y_len
     elsif dest == "3"
-      x += 1 if x < x_len
+      @x += 1 if @x < x_len
     elsif dest == "4"
-      x -= 1 if x > 0
+      @x -= 1 if @x > 0
     elsif dest == "0"
-      save(name, x, y) #autosave
+      save() #autosave
       play = false
       menu = true
     end
