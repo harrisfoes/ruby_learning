@@ -113,7 +113,7 @@ def press_any_key()
 end
 
 def draw_line()
-    puts "-------------"
+    puts "----------------------------"
 end
 
 def player_info()
@@ -134,7 +134,8 @@ def battle()
   @attack_log = ""
   @foe_log = ""
 
-  draw_line()
+  player_info()
+
   puts "You've encountered a #{foe}"
   puts "A battle commences!"
 
@@ -150,10 +151,8 @@ def battle()
   while @hp > 0 and foe_hp > 0
     #while there is still no winner
     
-    draw_line()
     puts "Defeat the #{foe}!"
     puts "#{BADDY_DEETS[foe.to_sym][:face]}"
-    draw_line()
 
     battle_log()
 
@@ -189,7 +188,7 @@ def battle()
   end
 
   battle_log()
-  draw_line()
+
   if @hp <= 0
     #lose scenario
     puts "GAME OVER"
@@ -215,6 +214,8 @@ while run
   while menu
    
     clear()
+    puts "------ DUNGEON CREW --------"
+    puts "~Tales of the Patikan Isles~"
     draw_line()
     puts "1 NEW GAME "
     puts "2 LOAD GAME " if File.exists?("load.json")
@@ -255,7 +256,7 @@ while run
 
     elsif choice == "4"
 
-      puts "Exiting Tales of Marrok"
+      puts "Exiting Tales of the Patikan"
       exit
 
     end
