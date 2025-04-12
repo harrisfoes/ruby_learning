@@ -11,6 +11,7 @@ rules = false
 @hp_max = 30
 @attack = 6
 @name = ""
+@potions = 1
 
 BADDIES = ["goblin", "poring"]        
 
@@ -20,7 +21,7 @@ BADDY_DEETS = {
     atk: 3,
     hp: 12,
     face: "<( o _;_;_, o)>",
-    reward: "Potion",
+    loot: "potion",
     gold: 6 
   },
   poring: {
@@ -28,7 +29,7 @@ BADDY_DEETS = {
     atk: 2,
     hp: 8,
     face: "( o _, o )",
-    reward: "Jelly",
+    loot: "jelly",
     gold: 4 
   }
 }
@@ -108,7 +109,7 @@ def load()
 end
 
 def press_any_key()
-    puts "Press any key..."
+    puts "Press any key to continue..."
     STDIN.getch
 end
 
@@ -131,6 +132,7 @@ def battle()
   foe_data = BADDY_DEETS[foe.to_sym]
   foe_hp = foe_data[:hp]
   foe_atk = foe_data[:atk]
+  foe_loot = foe_data[:loot]
   @attack_log = ""
   @foe_log = ""
 
@@ -157,6 +159,7 @@ def battle()
     battle_log()
 
     puts "#{@name}'s HP: #{@hp}"
+    puts "Potions: #{@potions}"
     puts "Enemy HP: #{foe_hp}"
     puts "Enemy ATK: #{foe_atk}"
     draw_line()
@@ -173,6 +176,13 @@ def battle()
       @attack_log = "You attack the #{foe} for #{dmg} damage"
     elsif choice == "2"
       #potion logic
+      if @potions > 0
+        @potions += 1
+        @hp += 6
+        @hp = @hp_max if @hp > @hp_max
+        puts "You heal for 6 hp!"  
+        press_any_key()
+      end
     elsif choice == "3"
       #run away logic
     end
