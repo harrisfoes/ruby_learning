@@ -12,6 +12,7 @@ rules = false
 @attack = 6
 @name = ""
 @potions = 1
+@gold = 1
 
 BADDIES = ["goblin", "poring"]        
 
@@ -98,7 +99,9 @@ def save()
     hp:@hp,
     attack: @attack, 
     x: @x,
-    y: @y
+    y: @y,
+    potions: @potions,
+    gold: @gold
   }
   File.open("load.json","w") { |file| file.write(data.to_json) }
 end
@@ -140,6 +143,7 @@ def battle()
 
   puts "You've encountered a #{foe}"
   puts "A battle commences!"
+  draw_line()
 
   def battle_log()
     if @attack_log.size() > 0 or @foe_log.size() > 0
@@ -177,10 +181,13 @@ def battle()
     elsif choice == "2"
       #potion logic
       if @potions > 0
-        @potions += 1
+        @potions -= 1
         @hp += 6
         @hp = @hp_max if @hp > @hp_max
         puts "You heal for 6 hp!"  
+        press_any_key()
+      else
+        puts "You have no potions left"
         press_any_key()
       end
     elsif choice == "3"
@@ -208,7 +215,16 @@ def battle()
     #win scenario
     puts "You win!"
     #check if wins a potion
-    puts "The #{foe} drops x gold"
+    if rand(100) > 50
+      reward = rand(6)
+      #@gold += reward
+    end
+
+    if rand(100) > 25
+      @potions += 1
+    end
+
+    puts "The #{foe} drops #{reward} gold"
     puts "The #{foe} drops a potion"
   end
   draw_line()
@@ -250,6 +266,8 @@ while run
       @attack = data['attack'].to_i
       @x = data['x'].to_i
       @y = data['y'].to_i
+      @potions = data['potions'].to_i
+      @gold = data['gold'].to_i
 
       puts "Game Loaded"
       puts "Your name is #{@name}"
