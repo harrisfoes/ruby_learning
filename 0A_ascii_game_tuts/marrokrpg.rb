@@ -125,6 +125,7 @@ def player_info()
     puts "#{@name}"
     puts "HP: #{@hp}/#{@hp_max}"
     puts "ATTACK: #{@attack}"
+    puts "gold: #{@gold}"
     puts "YOU ARE IN THE #{BIOME[MAP[@y][@x].to_sym][:d]}"
     draw_line()
 end
@@ -192,6 +193,17 @@ def battle()
       end
     elsif choice == "3"
       #run away logic
+      if rand(100) > 30
+        @traveling = true
+        puts "You run away successfully..."
+        press_any_key()
+        clear()
+        return
+      elsif
+        puts "You cannot escape!"
+        press_any_key()
+        clear()
+      end
     end
 
     if foe_hp > 0
@@ -216,15 +228,15 @@ def battle()
     puts "You win!"
     #check if wins a potion
     if rand(100) > 50
-      reward = rand(6)
-      #@gold += reward
+      @reward = rand(6)
+      @gold += @reward
     end
 
     if rand(100) > 25
       @potions += 1
     end
 
-    puts "The #{foe} drops #{reward} gold"
+    puts "The #{foe} drops #{@reward} gold"
     puts "The #{foe} drops a potion"
   end
   draw_line()
