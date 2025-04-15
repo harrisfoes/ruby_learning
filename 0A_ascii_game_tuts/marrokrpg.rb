@@ -126,6 +126,7 @@ def player_info()
     puts "HP: #{@hp}/#{@hp_max}"
     puts "ATTACK: #{@attack}"
     puts "gold: #{@gold}"
+    puts "potions: #{@potions}"
     puts "YOU ARE IN THE #{BIOME[MAP[@y][@x].to_sym][:d]}"
     draw_line()
 end
@@ -230,14 +231,14 @@ def battle()
     if rand(100) > 50
       @reward = rand(6)
       @gold += @reward
+      puts "The #{foe} drops #{@reward} gold"
     end
 
-    if rand(100) > 25
+    if rand(100) > 60
       @potions += 1
+      puts "The #{foe} drops a potion"
     end
 
-    puts "The #{foe} drops #{@reward} gold"
-    puts "The #{foe} drops a potion"
   end
   draw_line()
   press_any_key()
