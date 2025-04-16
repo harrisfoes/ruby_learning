@@ -14,7 +14,7 @@ rules = false
 @potions = 1
 @gold = 1
 
-BADDIES = ["goblin", "poring"]        
+BADDIES = ["goblin", "poring","rocker"]        
 
 BADDY_DEETS = {
   goblin: {
@@ -32,6 +32,14 @@ BADDY_DEETS = {
     face: "( o _, o )",
     loot: "jelly",
     gold: 4 
+  },
+  rocker: {
+    name: "Rocker",
+    atk: 4,
+    hp: 10,
+    face: "<* .------. *>",
+    loot: "Rocker Leg", 
+    gold: 5 
   }
 }
 
@@ -291,8 +299,17 @@ while run
 
     elsif choice == "3"
 
-      puts "These are the rules"
-      puts "Your name is #{@name}"
+      clear()
+      draw_line()
+      puts "Your name is #{@name}" if @name.size() > 1
+      draw_line()
+      puts "The land has been ravaged by a dragon hiding in the lair."
+      puts "Adventurers far and wide have been called to destroy it."
+      puts "You are one such adventurer, braving the wilderness for treasure, glory, and a better life"
+      puts "Will you overcome the challenge, or will you falter?"
+      draw_line()
+      puts "Welcome to the Patikan Isles"
+      draw_line()
       press_any_key()
 
     elsif choice == "4"
