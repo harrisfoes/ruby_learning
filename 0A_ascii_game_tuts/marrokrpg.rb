@@ -331,10 +331,13 @@ while run
       if rand(100) < 30
         @traveling = false
         menu = false
-
         battle()
-
       end
+    end
+
+    if BIOME[MAP[@y][@x].to_sym][:d] == "TOWN"
+      draw_line()
+      puts "You are in town"
     end
 
     if @traveling 
