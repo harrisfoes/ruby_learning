@@ -14,7 +14,7 @@ rules = false
 @potions = 1
 @gold = 1
 
-BADDIES = ["goblin", "poring","rocker"]        
+BADDIES = ["goblin", "poring","rocker","picky"]        
 
 BADDY_DEETS = {
   goblin: {
@@ -40,6 +40,14 @@ BADDY_DEETS = {
     face: "<* .------. *>",
     loot: "Rocker Leg", 
     gold: 5 
+  },
+  picky: {
+    name: "Picky",
+    atk: 1,
+    hp: 2,
+    face: "<(  ovo  )>",
+    loot: "Feather",
+    gold: 1
   }
 }
 
