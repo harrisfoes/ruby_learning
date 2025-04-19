@@ -147,6 +147,10 @@ def player_info()
     draw_line()
 end
 
+def in_town?()
+  BIOME[MAP[@y][@x].to_sym][:d] == "TOWN"
+end
+
 def battle()
   #battle, respawn from a list of possible baddies
   foe = BADDIES[rand(BADDIES.length)]
@@ -343,7 +347,7 @@ while run
       end
     end
 
-    if BIOME[MAP[@y][@x].to_sym][:d] == "TOWN"
+    if in_town? 
       draw_line()
       puts "You are in town"
     end
@@ -354,7 +358,7 @@ while run
       puts "2 GO SOUTH" if @y < y_len
       puts "3 GO EAST"  if @x < x_len
       puts "4 GO WEST"  if @x > 0
-      # puts "Coords #{x} #{y}"
+      puts "5 TALK TO THE MAYOR" if in_town?
     end
 
     draw_line()
@@ -370,6 +374,9 @@ while run
       @x += 1 if @x < x_len
     elsif dest == "4"
       @x -= 1 if @x > 0
+    elsif dest == "5"
+      puts "Hello there dear adventurer"
+      press_any_key()
     elsif dest == "0"
       save() #autosave
       play = false
