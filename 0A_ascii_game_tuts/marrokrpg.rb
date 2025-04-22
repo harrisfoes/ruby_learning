@@ -176,6 +176,27 @@ def battle()
     end
   end
 
+  def quest_dump()
+    clear()
+    draw_line()
+    puts "Hello there dear adventurer"
+    press_any_key()
+    puts "You have been brought here to slay the dragon, no?"
+    press_any_key()
+    puts "Yes, yes, that's true, you cannot pass the road just yet"
+    press_any_key()
+    puts "Not until you have the key"
+    press_any_key()
+    puts "And where to find it, you ask?"
+    press_any_key()
+    puts "Tis simple, go out and prove yourself worthy by slaying many foes"
+    press_any_key()
+    puts "Then, when you feel your efforts sufficient, you may come back to me to demonstrate your worthiness"
+    press_any_key()
+    puts "So go forth and be careful, the road is full of peril, but therein lies GLORY"
+    press_any_key()
+  end
+
   while @hp > 0 and foe_hp > 0
     #while there is still no winner
     
@@ -375,25 +396,7 @@ while run
     elsif dest == "4"
       @x -= 1 if @x > 0
     elsif dest == "5"
-      clear()
-      draw_line()
-      puts "Hello there dear adventurer"
-      press_any_key()
-      puts "You have been brought here to slay the dragon, no?"
-      press_any_key()
-      puts "Yes, yes, that's true, you cannot pass the road just yet"
-      press_any_key()
-      puts "Not until you have the key"
-      press_any_key()
-      puts "And where to find it, you ask?"
-      press_any_key()
-      puts "Tis simple, go out and prove yourself worthy by slaying many foes"
-      press_any_key()
-      puts "Then, when you feel your efforts sufficient, you may come back to me to demonstrate your worthiness"
-      press_any_key()
-      puts "So go forth and be careful, the road is full of peril, but therein lies GLORY"
-      press_any_key()
-
+      quest_dump()
     elsif dest == "0"
       save() #autosave
       play = false
