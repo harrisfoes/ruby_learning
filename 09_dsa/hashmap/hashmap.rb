@@ -1,6 +1,10 @@
 class Hashmap
   attr_accessor :load, :factor, :capacity
 
+  def init()
+    @capacity = 1000
+  end
+
   def hash(key)
     hash_code = 0
     prime_number = 31
@@ -12,6 +16,8 @@ class Hashmap
 
   def set(key, value)
     hash_value = hash(key)
+    value = arr[hash_value]
+    #then store it into a array with such hash value ?
     #takes two arguments, the first is a key and the second is a value that is assigned to this key.
     #If a key already exists, then the old value is overwritten or we can say that we update the key’s value
     #(e.g. Carlos is our key but it is called twice: once with value I am the old value., and once with value I am the new value.. 
